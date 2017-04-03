@@ -42,11 +42,24 @@ func gaussianBlurKernel1D(x int, sigma float64) float64 {
 }
 
 func generate1DGaussKernel(radius int, sigma float64) []float64 {
-	width := (radius * 2) + 1
-	kernel := make([]float64, width)
-	for i := 0; i < width; i++ {
-		kernel[i] = gaussianBlurKernel1D(absInt(i, radius), sigma)
+	var width int
+	if radius % 2 == 0 {
+		width = radius + 1
+	} else {
+		width = radius
 	}
+
+	kernel := make([]float64, width)
+	gaussSum := 0.0
+	for i := 0; i < width; i++ {
+		kernel[i] = gaussianBlurKernel1D(absInt(i, width), sigma)
+		gaussSum += kernel[i]
+	}
+
+	// for i := range kernel {
+	// 	kernel[i] /= gaussSum
+	// }
+	
 	return kernel
 }
 
